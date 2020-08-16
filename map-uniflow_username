@@ -1,0 +1,43 @@
+#!/bin/bash
+
+## Jamf Policy Parameters
+jssUser=$4
+jssPass=$5
+jssHost=$6
+uniFLOWurl=$7
+
+
+function setuniFLOWPrinters ()
+{
+
+## Capture the user input into a variable
+uniFLOWUSER=$(/usr/bin/osascript << EOF 
+tell application "System Events"
+    activate
+    display dialog "Enter username to map uniFLOW SecurePrint and DelegatePrint." default answer ""
+    set uniFLOWuser to text returned of result
+end tell
+EOF)
+
+## Check the variable to make sure it's not empty...
+if [ "$uniFLOWUSER" == "" ]; then
+    echo ""
+    setuniFLOWPrinters
+else
+    echo "uniFLOW Printers have been mapped."
+fi
+
+}
+
+## Run the function above
+setuniFLOWPrinters
+
+## If either the username came back blank from the above API calls, exit
+if [[ "$uniFLOWUSER" == "" ]]; then
+    echo "Error - Username blank"
+    exit 1
+## Map UniFlow Secure and Delegated queues
+else
+    /usr/sbin/lpadmin -p "SecurePrint" -E -v lpd://$uniFLOWUSER@$uniFLOWurl/SecurePrint -P /etc/cups/ppd/SecurePrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "SecurePrint"
+    /usr/sbin/lpadmin -p "DelegatedPrint" -E -v lpd://$uniFLOWUSER@$uniFLOWurl/DelegatedPrint -P /etc/cups/ppd/DelegatedPrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "DelegatedPrint" 
+fi
