@@ -18,6 +18,6 @@ if [[ "$username" == "" ]]; then
     exit 1
 ## Map UniFlow Secure and Delegated queues
 else
-    /usr/sbin/lpadmin -p "SecurePrint" -E -v lpd://$userName@$uniFLOWurl/SecurePrint -P /etc/cups/ppd/SecurePrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "SecurePrint"
-    /usr/sbin/lpadmin -p "DelegatedPrint" -E -v lpd://$userName@$uniFLOWurl/DelegatedPrint -P /etc/cups/ppd/DelegatedPrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "DelegatedPrint" 
+    /usr/sbin/lpadmin -p "SecurePrint" -E -v lpd://$username@$uniFLOWurl/SecurePrint -P /etc/cups/ppd/SecurePrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "SecurePrint"
+    /usr/sbin/lpadmin -p "DelegatedPrint" -E -v lpd://$username@$uniFLOWurl/DelegatedPrint -P /etc/cups/ppd/DelegatedPrint.ppd -o printer-is-shared="False" -o "ColorModel=Gray" -D "DelegatedPrint" 
 fi
